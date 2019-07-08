@@ -85,6 +85,7 @@ class CPU:
         
         while True:
             IR = self.pc  # instruction register
+            # print(f'IR is {IR}')
             opcode = self.ram_read(IR)
             operand_a = self.ram_read(IR + 1)
             operand_b = self.ram_read(IR + 2)
@@ -92,15 +93,13 @@ class CPU:
             if opcode == 0b10000010:  # LDI
                 # register is operand_a
                 # value is operand_b
-                self.ram_write(operand_b, operand_a)
-                setattr(self,f'r{operand_a}',operand_b)
-                # increment the pc
-                self.pc += 3
+                setattr(self,f'r{operand_a}' ,operand_b)
+                
             elif opcode == 0b01000111:  # PRN
                 # print the numeric value in register of operand_a
+                # print(f'r{operand_a}')
                 print(getattr(self, f'r{operand_a}'))
-                # increment the pc
-                self.pc += 2
+                pass
             elif opcode == 0b00000001:# HLT
                 # terminate program
                 sys.exit()
@@ -114,3 +113,7 @@ class CPU:
                 pass
             elif opcode == 0b1:
                 pass
+            # increment the pc
+            string_op_used = format(opcode, '#010b')[2:4] 
+            self.pc += int(string_op_used, 2) +1
+            
